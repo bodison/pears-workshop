@@ -13,7 +13,7 @@
   "type": "module",
   "license": "ACSL",
   "scripts": {
-    "dev": "pear run -d .",
+    "dev": "./pear/pear.dev run -d .",
     "test": "brittle test/*.test.js"
   },
   "devDependencies": {

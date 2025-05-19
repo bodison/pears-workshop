@@ -6,56 +6,63 @@
   ...
 }:
 
+let
+  buildInputs = with pkgs; [
+    glib # libglib-2.0.so.0
+    nss # libnss3.so
+    nspr # libnspr4.so
+    dbus # libdbus-1.so.3
+    at-spi2-atk # libatk-1.0.so.0
+    cups # libcups.so.2
+    libdrm # libdrm.so.2
+    gtk3 # libgtk-3.so.0
+    pango # libpango-1.0.so.0
+    cairo # libcairo.so.2
+    xorg.libX11 # libX11.so.6
+    xorg.libXcomposite # libXcomposite.so.1
+    xorg.libXdamage # libXdamage.so.1
+    xorg.libXext # libXext.so.6
+    xorg.libXfixes # libXfixes.so.3
+    xorg.libXrandr # libXrandr.so.2
+    libgbm # libgbm.so.1
+    expat # libexpat.so.1
+    xorg.libxcb # libxcb.so.1
+    libxkbcommon # libxkbcommon.so.0
+    alsa-lib # libasound.so.2
+    libuuid # libmount.so.1 version `MOUNT_2_40'
+    libglvnd # libGL.so.1 (might be optional, pear runtime starts without)
+  ];
+in
 {
-  # https://devenv.sh/basics/
-  env.GREET = "pears workshop devenv";
+  env = {
+    GREET = "pears workshop devenv";
+    LD_LIBRARY_PATH = "${with pkgs; lib.makeLibraryPath buildInputs}";
+  };
 
   # https://devenv.sh/packages/
-  packages = [
-    pkgs.git
-    pkgs.nodejs_23
-    # pkgs.libgccjit # includes libatmic
-    # pkgs.libatomic_ops
+  packages = with pkgs; [
+    git
+    nodejs_23
   ];
 
-  # https://devenv.sh/languages/
-  # languages.rust.enable = true;
-
-  # https://devenv.sh/processes/
-  # processes.cargo-watch.exec = "cargo-watch";
-
-  # https://devenv.sh/services/
-  # services.postgres.enable = true;
-
   # https://devenv.sh/scripts/
-  scripts.hello.exec = ''
-    ${pkgs.cowsay}/bin/cowsay Hello from $GREET
-  '';
+  scripts = {
+    hello.exec = ''
+      ${pkgs.cowsay}/bin/cowsay Hello from $GREET
+    '';
+    InstallPearRuntime.exec = ''
+      git clone https://github.com/holepunchto/pear \
+        && cd pear \
+        && git switch release/1.13.x \
+        && npm ci \
+        && npm run bootstrap \
+        && cd ..
+    '';
+  };
 
   enterShell = ''
     hello
     git --version
-    git clone https://github.com/holepunchto/pear && cd pear && npm ci
+    InstallPearRuntime
   '';
-  # npx pear
-
-  # export PATH=~/.config/pear/bin:$PATH
-  # ln -s ~/.config/pear/current/by-arch/linux-x64/bin ~/.config/pear/
-
-  # https://devenv.sh/tasks/
-  # tasks = {
-  #   "myproj:setup".exec = "mytool build";
-  #   "devenv:enterShell".after = [ "myproj:setup" ];
-  # };
-
-  # https://devenv.sh/tests/
-  enterTest = ''
-    echo "Running tests"
-    git --version | grep --color=auto "${pkgs.git.version}"
-  '';
-
-  # https://devenv.sh/git-hooks/
-  # git-hooks.hooks.shellcheck.enable = true;
-
-  # See full reference at https://devenv.sh/reference/options/
 }
