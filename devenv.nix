@@ -43,6 +43,7 @@ in
   packages = with pkgs; [
     git
     nodejs_23
+    graphene # if you want to run keet (./pear/pear.dev run pear://keet)
   ];
 
   # https://devenv.sh/scripts/
