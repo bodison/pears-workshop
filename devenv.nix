@@ -59,6 +59,18 @@ in
         && npm run bootstrap \
         && cd ..
     '';
+    # pear.exec = ''
+    #   ./pear/pear.dev "$@";
+    # '';
+    drystage.exec = ''
+      ./pear/pear.dev stage my-app --dry-run .
+    '';
+    stage.exec = ''
+      ./pear/pear.dev stage my-app .
+    '';
+    seed.exec = ''
+      ./pear/pear.dev seed my-app
+    '';
   };
 
   enterShell = ''

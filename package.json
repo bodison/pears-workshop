@@ -1,9 +1,27 @@
 {
   "name": "pears-workshop",
+  "version": "0.1.0",
   "main": "index.html",
   "pear": {
     "name": "pears-workshop",
     "type": "desktop",
+    "stage": {
+      "ignore": [
+        "pear",
+        ".devenv",
+        ".git",
+        ".gitignore",
+        ".github",
+        ".DS_Store",
+        ".vscode",
+        "test",
+        "sidecar.crash.log",
+        "electron-main.crash.log",
+        "cli.crash.log",
+        "package-lock.json",
+        "node_modules/.package-lock.json"
+      ]
+    },
     "gui": {
       "backgroundColor": "#1F2430",
       "height": "540",
@@ -12,6 +30,7 @@
   },
   "type": "module",
   "license": "ACSL",
+  "author": "bodison",
   "scripts": {
     "dev": "./pear/pear.dev run -d .",
     "test": "brittle test/*.test.js"
